@@ -205,6 +205,15 @@ def sub(op1, op2):
     set_var(op1, v)
 
 
+# -- Multiply op1 and op2 and store in op3
+#    Equivalent to op3 = op1 * op2
+#    op1 or op2 can be literals
+def mul(op1, op2, op3):
+    v1 = get_var(op1)
+    v2 = get_var(op2)
+    v = v1 * v2
+    set_var(op3, v)
+
 # -- Compare two variables, return True if op1 == op2
 #    Either op can be a literal
 def equal(op1, op2):
