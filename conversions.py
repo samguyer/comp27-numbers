@@ -22,6 +22,7 @@ def as_binary(byte):
             bin = bin + '0'
         else:
             bin = bin + '1'
+        byte = byte << 1
     return bin
 
 
@@ -30,6 +31,7 @@ def as_binary(byte):
 #    bytes in order, with four bytes (32 bits) on each line
 #    The column at the left side shows the address.
 def show_memory():
+    print("MEMORY:")
     for i in range(0, len(Memory), 4):
         line = ''
         for j in range(4):
@@ -59,7 +61,7 @@ def store_byte(byte, address):
         print("Seg fault")
         return None
     else:
-        Memory[address] = byte
+        Memory[address] = (byte % 256)
 
 
 # -- Load an unsigned 8-bit int from the given address
@@ -247,3 +249,5 @@ mov(0, value)
 while less_than(value, 10):
     add(1, value)
     show('Value is ', value)
+
+show_memory()
