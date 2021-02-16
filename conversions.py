@@ -253,10 +253,73 @@ def show(msg, op):
 
 # === Finally, the program ==========================================
 
-value = var(8, 'sint16')
-mov(0, value)
-while less_than(value, 10):
-    add(1, value)
-    show('Value is ', value)
+# Exercise 1:
+# Use a larger int (more bits) to discover the limitations of a smaller one
+small_int = var(4, 'sint8')
+big_int = var(8, 'uint16')
 
-show_memory()
+mov(1, small_int)
+mov(1, big_int)
+while equal(small_int, big_int):
+    add(1, small_int)
+    add(1, big_int)
+
+show('Small int is ', small_int)
+show('Big int is ', big_int)
+
+
+# Exercise 2:
+# Compute a student's age based on the number of years in college
+# Overflow the number of years to get a smaller age. Try entering
+# an age close to the 8-bit limit -- something like 254. Notice that
+# it is the same bit pattern as signed int -2.
+
+years = var(2, 'uint8')
+age = var(4, 'uint8')
+mov(17, age)
+read('Enter number of years in college: ', years)
+add(years, age)
+show('Your age is ', age)
+
+
+# Exercise 3:
+# Compute the cost for some number of widgets and some number of gadgets.
+# A widget costs $12, a gadget costs $7. It is possible by choosing the
+# right number of widgets and gadgets to overflow the cost and end up
+# paying $0
+# Try entering 19 widgets and 4 gadgets (there are other solutions)
+
+num_widgets = var(10, 'uint8')
+num_gadgets = var(12, 'uint8')
+read('Enter number of widgets:', num_widgets)
+read('Enter number of gadgets:', num_gadgets)
+widget_cost = var(14, 'uint8')
+gadget_cost = var(16, 'uint8')
+total_cost = var(18, 'uint8')
+mul(num_widgets, 12, widget_cost)
+mul(num_gadgets, 7, gadget_cost)
+mov(widget_cost, total_cost)
+add(gadget_cost, total_cost)
+show('Total cost is ', total_cost)
+
+
+# Exercise 4:
+# Compute the award for a credit card points system. Each point is worth $4.
+# The max amount of the award is $500, no matter how many points the
+# customer has. You can get much more by entering the right number of points.
+# Try entering a small negative number, which still satisfies the less-than
+# check, but when converted to an unsigned int, becomes a huge number. This
+# is the same strategy used against SSH in a real attack.
+
+max_award = var(10, 'uint16')
+mov(500, max_award)
+final_award = var(16, 'uint16')
+points = var(12, 'sint16')
+award = var(14, 'sint16')
+read('How many points? ', points)
+mul(points, 4, award)
+if less_than(award, max_award):
+    mov(award, final_award)
+else:
+    mov(max_award, final_award)
+show('Awarded: $', final_award)
